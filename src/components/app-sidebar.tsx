@@ -1,5 +1,7 @@
 import * as React from "react"
-import { GalleryVerticalEnd, Minus, Plus } from "lucide-react"
+import { FlameIcon, GalleryVerticalEnd, HomeIcon, Minus, Plus, TrendingUpIcon } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
 import { SearchForm } from "@/components/search-form"
 import {
@@ -22,162 +24,51 @@ import {
 } from "@/components/ui/sidebar"
 
 // This is sample data.
-const data = {
+type SideBarData={
+navMain:{
+  title:string;
+  url:string;
+  items:{
+    title:string;
+    url:string;
+    isActive:boolean;
+
+  }[];
+}[];
+}
+const sideBarData:SideBarData = {
   navMain: [
     {
-      title: "Getting Started",
+      title: "Communities",
       url: "#",
       items: [
         {
           title: "Installation",
           url: "#",
+          isActive:false,
         },
         {
           title: "Project Structure",
           url: "#",
+          isActive:false,
         },
-      ],
-    },
-    {
-      title: "Building Your Application",
-      url: "#",
-      items: [
-        {
-          title: "Routing",
-          url: "#",
-        },
-        {
-          title: "Data Fetching",
-          url: "#",
-          isActive: true,
-        },
-        {
-          title: "Rendering",
-          url: "#",
-        },
-        {
-          title: "Caching",
-          url: "#",
-        },
-        {
-          title: "Styling",
-          url: "#",
-        },
-        {
-          title: "Optimizing",
-          url: "#",
-        },
-        {
-          title: "Configuring",
-          url: "#",
-        },
-        {
-          title: "Testing",
-          url: "#",
-        },
-        {
-          title: "Authentication",
-          url: "#",
-        },
-        {
-          title: "Deploying",
-          url: "#",
-        },
-        {
-          title: "Upgrading",
-          url: "#",
-        },
-        {
-          title: "Examples",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "API Reference",
-      url: "#",
-      items: [
-        {
-          title: "Components",
-          url: "#",
-        },
-        {
-          title: "File Conventions",
-          url: "#",
-        },
-        {
-          title: "Functions",
-          url: "#",
-        },
-        {
-          title: "next.config.js Options",
-          url: "#",
-        },
-        {
-          title: "CLI",
-          url: "#",
-        },
-        {
-          title: "Edge Runtime",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Architecture",
-      url: "#",
-      items: [
-        {
-          title: "Accessibility",
-          url: "#",
-        },
-        {
-          title: "Fast Refresh",
-          url: "#",
-        },
-        {
-          title: "Next.js Compiler",
-          url: "#",
-        },
-        {
-          title: "Supported Browsers",
-          url: "#",
-        },
-        {
-          title: "Turbopack",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Community",
-      url: "#",
-      items: [
-        {
-          title: "Contribution Guide",
-          url: "#",
-        },
-      ],
-    },
+      ]
+    }
   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
+    //TODO GET ALL SIDE REDDITS FROM SANITY
+    //const subreddits=await get Subreddits();
     <Sidebar {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <GalleryVerticalEnd className="size-4" />
-                </div>
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">Documentation</span>
-                  <span className="">v1.0.0</span>
-                </div>
-              </a>
+              <Link href="/">
+                <Image src="/images/Reddit logo Only.svg" alt="logo" width={50} height={50} className="object-contain"/>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -186,7 +77,34 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {data.navMain.map((item, index) => (
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+{/*CreateCommunityButton */}
+              </SidebarMenuButton>
+              <SidebarMenuButton asChild className="p-5">
+<Link href='/' >
+<HomeIcon className="w-4 h-4 mr-2"/>
+Home
+</Link>
+              </SidebarMenuButton>
+              <SidebarMenuButton asChild className="p-5">
+              <Link href='/popular' >
+<TrendingUpIcon className="w-4 h-4 mr-2"/>
+Popular
+</Link>
+              </SidebarMenuButton><SidebarMenuButton asChild className="p-5">
+              <Link href='/hot' >
+<FlameIcon className="w-4 h-4 mr-2"/>
+Hot/Controversial
+</Link>
+              </SidebarMenuButton>
+              
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarMenu>
+            {sideBarData.navMain.map((item, index) => (
               <Collapsible
                 key={item.title}
                 defaultOpen={index === 1}

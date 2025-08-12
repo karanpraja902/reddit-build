@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Header from "@/components/Header";
-import { SidebarProvider, } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider, } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 
 const geistSans = Geist({
@@ -28,19 +28,21 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-<html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <SidebarProvider>
-          <AppSidebar/>
-<Header/>
-        {children}
-        </SidebarProvider>
-        
-      </body>
-    </html>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <SidebarProvider>
+            <AppSidebar/>
+            <SidebarInset>
+              <Header/>
+              <main className="flex-1 p-4">
+                {children}
+              </main>
+            </SidebarInset>
+          </SidebarProvider>
+        </body>
+      </html>
     </ClerkProvider>
-    
   );
 }
