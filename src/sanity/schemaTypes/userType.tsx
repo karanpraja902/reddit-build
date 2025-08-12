@@ -1,5 +1,7 @@
 import { UserIcon } from "lucide-react";
-import { defineField, defineType, Image } from "sanity";
+import { Icon } from "next/dist/lib/metadata/types/metadata-types";
+import { defineField, defineType } from "sanity";
+import Image from "next/image";
 
 export const userType = defineType({
   name: "user",

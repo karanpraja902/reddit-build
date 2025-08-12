@@ -1,13 +1,13 @@
 "use client"
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/nextjs'
 import React from 'react'
-import { Button } from "./ui/button";
-import RedditLogoOnly from "../../public/images/Reddit logo Only.svg";
-import RedditFull from "../../public/images/Reddit full.svg";
+import { Button } from "../ui/button";
+import RedditLogoOnly from "../../../public/images/Reddit logo Only.svg";
+import RedditFull from "../../../public/images/Reddit full.svg";
 
 import { ChevronLeftIcon, MenuIcon } from "lucide-react";
 import Image from "next/image";
-import { useSidebar } from './ui/sidebar';
+import { useSidebar } from '../ui/sidebar';
 
 function Header() {
   const { user } = useUser();

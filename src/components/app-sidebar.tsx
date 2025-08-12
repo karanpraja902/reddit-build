@@ -22,6 +22,8 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { getSubreddits } from "@/sanity/lib/subreddit/getSubreddits"
+import CreateCommunityButton from "./header/createCummunityButton"
 
 // This is sample data.
 type SideBarData={
@@ -57,7 +59,22 @@ const sideBarData:SideBarData = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const subreddits=await getSubreddits();
+  console.log(subreddits)
+  const sideBarData:SideBarData = {
+    navMain: [
+      {
+        title: "Communities",
+        url: "#",
+        items: subreddits?.map((subreddit)=>({
+title:subreddit.title||"unknown",
+url:`/community/${subreddit.slug}`,
+isActive:false,
+        }))||[],
+      }
+    ],
+  }
   return (
     //TODO GET ALL SIDE REDDITS FROM SANITY
     //const subreddits=await get Subreddits();
@@ -79,7 +96,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-{/*CreateCommunityButton */}
+{/*CreateCommunityButton */}<CreateCommunityButton/>
               </SidebarMenuButton>
               <SidebarMenuButton asChild className="p-5">
 <Link href='/' >
@@ -127,7 +144,7 @@ Hot/Controversial
                               asChild
                               isActive={item.isActive}
                             >
-                              <a href={item.url}>{item.title}</a>
+                              <Link href={item.url}>{item.title}</Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
