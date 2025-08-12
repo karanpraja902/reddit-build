@@ -47,13 +47,16 @@ if(existingUser.data?._id){
     return user;
 }
 console.log("User not found in database, creating new user")
-const newUser= await addUser({
-    id:loggedInUser.id,
-    username:parseUsername(loggedInUser.fullName),
-    email:loggedInUser.primaryEmailAddress?.emailAddress||loggedInUser.emailAddresses[0].emailAddress,
-    imageUrl:loggedInUser.imageUrl,
+const newUser = await addUser({
+    id: loggedInUser.id,
+    username: parseUsernmae(loggedInUser.fullName),
+    email: loggedInUser.primaryEmailAddress?.emailAddress || loggedInUser.emailAddresses[0].emailAddress,
+    imageUrl: loggedInUser.imageUrl,
 });
-        }catch(error){
-
-        }
+        
+        return newUser;
+    } catch (error) {
+        console.error("Error in getUser:", error);
+        return { error: "Failed to get user" };
     }
+}
