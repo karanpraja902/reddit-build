@@ -3,14 +3,13 @@ import { defineQuery } from "next-sanity"
 
  const getPosts=async ()=> {
     const getAllPostsQuery=
-    defineQuery(`*[type=='post'&&isDeleted!=false]{
+    defineQuery(`*[_type=='post'&&isDeleted!=false]{
 _id,
 title, 
-"slug":slug.cuurrent,
+"slug":slug.current,
 body, 
 publishedAt,
-"author":author->
-,
+"author":author->,
 "subreddit":subreddit->,
 image,
 isDeleted

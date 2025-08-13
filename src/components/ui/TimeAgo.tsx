@@ -5,7 +5,7 @@ interface dateProps{
     date:Date
 }
 function TimeAgo(date:dateProps) {
-    return <TimeAgoComponent date={date} />;
+    return <TimeAgoComponent date={date.date} />;
 }
 
 export default TimeAgo;

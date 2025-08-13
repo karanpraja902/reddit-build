@@ -5,12 +5,16 @@ import { getPostComments } from "@/sanity/lib/vote/getPostComments";
 import TimeAgo from "react-timeago";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
+import { MessageSquare } from "lucide-react";
+import CommentInput from "../comment/CommentInput";
+
+
 
 interface PostProps{
-    post:GetAllPostsQueryResult[number];
-userId:string|null
+    post: GetAllPostsQueryResult[number]; // Change from GetAllPostsQueryResult[number] to any
+    userId: string | null;
 }
-async function Post({post,userId}:PostProps){
+async function Post({post, userId}: PostProps){
 const votes=await getPostVotes(post._id);
 const vote=await getUserPostVoteStatus(post._id,userId);
 const comments=await getPostComments(post._id,userId);
@@ -71,7 +75,7 @@ const comments=await getPostComments(post._id,userId);
         </div>
     )
 }
-post.image && post.image.asset?._ref && (
+{post.image && post.image.asset?._ref && (
     <div className="relative w-full h-64 mb-3 px-2 bg-gray-100/30">
         <Image
             src={urlFor(post.image).url()}  //urlFor-helper function // Ensure urlFor is imported from "@/sanity/lib/image"
@@ -80,7 +84,14 @@ post.image && post.image.asset?._ref && (
             className="object-contain rounded-md p-2"
         />
     </div>
-)
+)}
+<button className="flex items-center px-1 py-2 gap-1 text-sm text-gray-500">
+    <MessageSquare className="w-4 h-4" />
+    <span>Comments ({length})</span>
+</button>
+{/* CommentInput */}
+{/* CommentList */}
+<CommentInput postId={post._id}  />
 </div>
 </div>
     {/* Buttons */}

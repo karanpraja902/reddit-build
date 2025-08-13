@@ -293,8 +293,87 @@ export type AllSanitySchemaTypes = Vote | Comment | Post | Subreddit | User | Sa
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/lib/post/getPosts.ts
 // Variable: getAllPostsQuery
-// Query: *[type=='post'&&isDeleted!=false]{_id,title, "slug":slug.cuurrent,body, publishedAt,"author":author->,"subreddit":subreddit->,image,isDeleted    }|order(publishedAt desc)
-export type GetAllPostsQueryResult = Array<never>;
+// Query: *[_type=='post'&&isDeleted!=false]{_id,title, "slug":slug.current,body, publishedAt,"author":author->,"subreddit":subreddit->,image,isDeleted    }|order(publishedAt desc)
+export type GetAllPostsQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: null;
+  body: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+  publishedAt: string | null;
+  author: {
+    _id: string;
+    _type: "user";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    username?: string;
+    email?: string;
+    imageUrl?: string;
+    joinedAt?: string;
+    isReported?: boolean;
+  } | null;
+  subreddit: {
+    _id: string;
+    _type: "subreddit";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    description?: string;
+    slug?: Slug;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    moderator?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "user";
+    };
+    createdAt?: string;
+  } | null;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  isDeleted: boolean | null;
+}>;
 
 // Source: ./src/sanity/lib/subreddit/createSubreddits.ts
 // Variable: checkExistingQuery
@@ -438,7 +517,7 @@ export type GetUserPostVoteStatusQueryResult = "downvote" | "upvote" | null;
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[type=='post'&&isDeleted!=false]{\n_id,\ntitle, \n\"slug\":slug.cuurrent,\nbody, \npublishedAt,\n\"author\":author->\n,\n\"subreddit\":subreddit->,\nimage,\nisDeleted\n    }|order(publishedAt desc)": GetAllPostsQueryResult;
+    "*[_type=='post'&&isDeleted!=false]{\n_id,\ntitle, \n\"slug\":slug.current,\nbody, \npublishedAt,\n\"author\":author->,\n\"subreddit\":subreddit->,\nimage,\nisDeleted\n    }|order(publishedAt desc)": GetAllPostsQueryResult;
     "\n    *[_type == \"subreddit\" && title == $name][0] {\n    _id\n    }\n    ": CheckExistingQueryResult;
     "\n        *[_type == \"subreddit\" && slug.current == $slug] [0] {\n            _id\n        }\n    ": CheckSlugQueryResult;
     "*[_type == \"subreddit\"] {\n      ...,\n      \"slug\": slug.current,\n      \"moderator\": moderator->,\n    } | order(createdAt desc)": GetSubredditsQueryResult;
