@@ -15,7 +15,7 @@ import { Textarea } from "../ui/textarea";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { creatCommunity } from "../../../actions/createCommunity";
-import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
+import { useRouter } from "next/navigation";
 
 function CreateCommunityButton() {
     const [open, setOpen] = useState(false);
@@ -27,6 +27,7 @@ function CreateCommunityButton() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [isPending, setTransition] = useTransition();
+    const router=useRouter()
 
     const [slug, setSlug] = useState("")
     console.log("user:"+user)
@@ -115,12 +116,13 @@ function CreateCommunityButton() {
                     } else if ("subreddit" in result && result.subreddit) {
                         setOpen(false);
                         resetForm();
-                        // router.refresh();
+router.push(`/community/${result.subreddit.slug?.current}`)
                     }
                 }
             } catch (error) {
-                console.log("failed to creater community", error);
-                setErrorMessage("failed to create community");
+                console.log("failed to create community", error);
+                setErrorMessage("failed to create community:"+error);
+                
             }
         })
     }

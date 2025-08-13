@@ -291,6 +291,11 @@ export type SanityAssetSourceData = {
 
 export type AllSanitySchemaTypes = Vote | Comment | Post | Subreddit | User | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./src/lib/post/getPosts.ts
+// Variable: getAllPostsQuery
+// Query: *[type=='post'&&isDeleted!=false]{_id,title, "slug":slug.cuurrent,body, publishedAt,"author":author->,"subreddit":subreddit->,image,isDeleted    }|order(publishedAt desc)
+export type GetAllPostsQueryResult = Array<never>;
+
 // Source: ./src/sanity/lib/subreddit/createSubreddits.ts
 // Variable: checkExistingQuery
 // Query: *[_type == "subreddit" && title == $name][0] {    _id    }
@@ -363,6 +368,7 @@ export type GetExistingUserQueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    "*[type=='post'&&isDeleted!=false]{\n_id,\ntitle, \n\"slug\":slug.cuurrent,\nbody, \npublishedAt,\n\"author\":author->\n,\n\"subreddit\":subreddit->,\nimage,\nisDeleted\n    }|order(publishedAt desc)": GetAllPostsQueryResult;
     "\n    *[_type == \"subreddit\" && title == $name][0] {\n    _id\n    }\n    ": CheckExistingQueryResult;
     "\n        *[_type == \"subreddit\" && slug.current == $slug] [0] {\n            _id\n        }\n    ": CheckSlugQueryResult;
     "*[_type == \"subreddit\"] {\n      ...,\n      \"slug\": slug.current,\n      \"moderator\": moderator->,\n    } | order(createdAt desc)": GetSubredditsQueryResult;

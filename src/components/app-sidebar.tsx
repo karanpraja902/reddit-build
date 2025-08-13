@@ -96,7 +96,7 @@ isActive:false,
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-{/*CreateCommunityButton */}<CreateCommunityButton/>
+              <CreateCommunityButton/>
               </SidebarMenuButton>
               <SidebarMenuButton asChild className="p-5">
 <Link href='/' >
