@@ -2,7 +2,7 @@ import { getPostVotes } from "@/sanity/lib/vote/getPostVotes";
 import { GetAllPostsQueryResult } from "../../../sanity.types";
 import { getUserPostVoteStatus } from "@/sanity/lib/vote/getUserPostVoteStatus";
 import { getPostComments } from "@/sanity/lib/vote/getPostComments";
-import TimeAgo from "react-timeago";
+import TimeAgo from "@/components/ui/TimeAgo";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { MessageSquare } from "lucide-react";
@@ -81,17 +81,16 @@ const comments=await getPostComments(post._id,userId);
             src={urlFor(post.image).url()}  //urlFor-helper function // Ensure urlFor is imported from "@/sanity/lib/image"
             alt={post.image.alt || "Post image"}
             fill
-            className="object-contain rounded-md p-2"
-        />
+            className="object-contain rounded-md p-2"/>
     </div>
 )}
 <button className="flex items-center px-1 py-2 gap-1 text-sm text-gray-500">
     <MessageSquare className="w-4 h-4" />
-    <span>Comments ({length})</span>
+    <span>Comments </span>
 </button>
 {/* CommentInput */}
 {/* CommentList */}
-<CommentInput postId={post._id}  />
+<CommentInput postId={post._id} parentCommentId="" />
 </div>
 </div>
     {/* Buttons */}

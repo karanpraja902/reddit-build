@@ -10,11 +10,10 @@ export default function Home() {
     <section className="bg-white border-b">
       <div className="mx-auto max-w-7xl px-4 py-6">
         <div >
-          <h1 className="test-2xl font-bold">
+          <h1 className="test-2xl font-bold">Home</h1>
             <p className="text-sm text-gray-600">
               Recent posts from all the communities
             </p>
-          </h1>
         </div>
       </div>
     </section>

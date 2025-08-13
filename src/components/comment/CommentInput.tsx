@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ReactElement, useState, useTransition } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Input } from "../ui/input";
