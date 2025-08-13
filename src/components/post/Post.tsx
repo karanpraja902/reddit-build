@@ -1,15 +1,93 @@
+import { getPostVotes } from "@/sanity/lib/vote/getPostVotes";
 import { GetAllPostsQueryResult } from "../../../sanity.types";
+import { getUserPostVoteStatus } from "@/sanity/lib/vote/getUserPostVoteStatus";
+import { getPostComments } from "@/sanity/lib/vote/getPostComments";
+import TimeAgo from "react-timeago";
+import Image from "next/image";
+import { urlFor } from "@/sanity/lib/image";
 
 interface PostProps{
     post:GetAllPostsQueryResult[number];
 userId:string|null
 }
-function Post({post,userId}:PostProps){
-
+async function Post({post,userId}:PostProps){
+const votes=await getPostVotes(post._id);
+const vote=await getUserPostVoteStatus(post._id,userId);
+const comments=await getPostComments(post._id,userId);
     return(
+        <article
+  key={post._id}
+  className="flex w-full flex-col rounded-xl border border-gray-200 bg-white p-4 shadow transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-950"
+>
+  <div className="flex">
+    {/* Vote Buttons */}
+    {/* <PostVoteButtons
+      contentId={post._id}
+      votes={votes}
+      vote={vote}
+      contentType="post"
+    /> */}
+
+    {/* Post Content */}
+<div className="flex-1 p-3">
+    <div className="flex items-center gap-2 text-xs ■text-gray-500 mb-2">
+        {post.subreddit && (
+            <>
+            <a href={`/community/${post.subreddit.slug}`}
+                className="font-medium hover:underline" >
+                c/{post.subreddit.title}
+            </a>
+            <span>*</span>
+            <span>Posted by</span>
+{post.author && (
+    <a
+        href={`/u/${post.author.username}`}
+        className="hover:underline"
+    >
+        u/{post.author.username}
+    </a>
+)}
+<span>*</span>
+{post.publishedAt && (
+    <TimeAgo date={new Date(post.publishedAt)} />
+)}
+            </>
+        )}
+    </div>
+    {
+    post.subreddit && (
         <div>
-Post
+            <h2 className="text-lg font-medium text-gray-900 mb-2">
+                {post.title}
+            </h2>
         </div>
+    )
+}
+
+{
+    post.body && post.body[0]?.children?.[0]?.text && (
+        <div className="prose prose-sm max-w-none text-gray-700 mb-3">
+            {post.body[0].children[0].text}
+        </div>
+    )
+}
+post.image && post.image.asset?._ref && (
+    <div className="relative w-full h-64 mb-3 px-2 bg-gray-100/30">
+        <Image
+            src={urlFor(post.image).url()}  //urlFor-helper function // Ensure urlFor is imported from "@/sanity/lib/image"
+            alt={post.image.alt || "Post image"}
+            fill
+            className="object-contain rounded-md p-2"
+        />
+    </div>
+)
+</div>
+</div>
+    {/* Buttons */}
+    {/* Report Button */}
+    {/* Delete Button */}
+</article>
+
     )
 }
 export default Post;
