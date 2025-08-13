@@ -14,6 +14,8 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { creatCommunity } from "../../../actions/createCommunity";
+import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
 
 function CreateCommunityButton() {
     const [open, setOpen] = useState(false);
@@ -27,6 +29,7 @@ function CreateCommunityButton() {
     const [isPending, setTransition] = useTransition();
 
     const [slug, setSlug] = useState("")
+    console.log("user:"+user)
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
         setName(value)
@@ -97,7 +100,7 @@ function CreateCommunityButton() {
                     });
                     fileName = imageFile.name;
                     fileType = imageFile.type;
-                    const result = await createCommunity(
+                    const result = await creatCommunity(
                         name.trim(),
                         imageBase64,
                         fileName,
@@ -105,6 +108,8 @@ function CreateCommunityButton() {
                         slug.trim(),
                         description.trim() || undefined
                     )
+                    console.log("community created:"+result)
+                    // router.push(`/community/${result.subreddit._id}`)
                     if ("error" in result && result.error) {
                         setErrorMessage(result.error);
                     } else if ("subreddit" in result && result.subreddit) {
@@ -166,7 +171,7 @@ function CreateCommunityButton() {
                             required
                             minLength={3}
                             maxLength={21}
-                            pattern="[a-z0-9-]+"
+                            pattern="[a-z0-9\-]+"
                             title="Lowcase letters,numbers and hypens only"
                         />
                         <p>

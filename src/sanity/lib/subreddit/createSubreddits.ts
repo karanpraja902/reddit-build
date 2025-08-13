@@ -1,5 +1,5 @@
 import { defineQuery } from "next-sanity";
-import { ImageData } from "../../../../actions/createCommunity";
+import type { ImageData } from "../../../../actions/createCommunity";
 import { sanityFetch } from "../live";
 import { adminClient } from "../adminClient";
 import { Subreddit } from "../../../../sanity.types";
@@ -14,84 +14,88 @@ export async function createSubreddit(
     console.log(`Creating subreddit: ${name} with moderator: ${moderatorId}`);
     try {
     // Check if subreddit with this name  already exists
-    Execute Query
-    const checkExistingQuery=defineQuery(`
+    const checkExistingQuery = defineQuery(`
     *[_type == "subreddit" && title == $name][0] {
     _id
     }
-    `)
-    const existingSubreddit =await sanityFetch({
+    `);
+    const existingSubreddit = await sanityFetch({
     query: checkExistingQuery,
     params: {name},
     });
-    if(existingSubreddit.data){
+    if (existingSubreddit.data) {
         console.log(`Subreddit ${name} already exists`);
         return {error:"A subreddit with this name already exists"}
     }
-}
-Execute Query
-const checkSlugQuery =defineQuery(`
-*[_type == "subreddit" && slug.current = $slug] [0] {
-_id
-}
-`);
 
-const existingSlug= await sanityFetch({
+    // Check if slug already exists
+    const checkSlugQuery = defineQuery(`
+        *[_type == "subreddit" && slug.current == $slug] [0] {
+            _id
+        }
+    `);
+
+const existingSlug = await sanityFetch({
 query: checkSlugQuery,
 params: {slug: customerSlug},
 });
 if (existingSlug.data) {
-console.log (`Subreddit with slug ${customSlug} already exists`);
-return { error: "A subreddit with this URL  already exists" };
+console.log(`Subreddit with slug ${customerSlug} already exists`);
+return { error: "A subreddit with this URL already exists" };
 }
     // Create slug from name or use custom slug
-const slug = customSlug || name.toLowerCase().replace(/\s+/g, "");
+const slug = customerSlug || name.toLowerCase().replace(/\s+/g, "");
 // Upload image if provided
 let imageAsset;
-if (imageData){
+if (imageData) {
 try {
 // Extract base64 data (remove data:image/jpeg;base64, part)
-const base64Data= imageData.base64.split(",")[1];
+const base64Data = imageData.base64.split(",")[1];
 // Convert base64 to buffer
-const buffer=Buffer.from(base64Data, "base64");
+const buffer = Buffer.from(base64Data, "base64");
 // Upload to Sanity
-imageAsset=await adminClient.assets.upload("image", buffer,{
-filename: ImageData.filename,
+imageAsset = await adminClient.assets.upload("image", buffer, {
+filename: imageData.filename,
 contentType: imageData.contentType,
 });
-console.log("Image asset:",imageAsset);
-}catch(error){
-    console.log("Error uploading image:",error)
+console.log("Image asset:", imageAsset);
+} catch (error) {
+    console.log("Error uploading image:", error);
 }}
 
-// Create the subreddit
-const subredditDoc: Partial<Subreddit> = {
-_type: "subreddit",
-title: name,
-description: customDescription ||` Welcome to r/${name}!`,
-slug: {
-current: slug,
-_type: "slug".
-},
-moderator: {
-_type: "reference",
-_ref: moderatorId,
-},
-createdAt: new Date().toISOString(),}
-// Add image if available
-if (imageAsset) {
-    subredditDoc.image = {
-    _type: "image",
-    asset: {
-    _type: "reference",
-    _ref: imageAsset._id,
+    // Create the subreddit
+    const subredditDoc: Partial<Subreddit> = {
+        _type: "subreddit",
+        title: name,
+        description: customerDescription || `Welcome to r/${name}!`,
+        slug: {
+            current: slug,
+            _type: "slug"
+        },
+        moderator: {
+            _type: "reference",
+            _ref: moderatorId,
+        },
+        createdAt: new Date().toISOString(),
+    };
+    
+    // Add image if available
+    if (imageAsset) {
+        subredditDoc.image = {
+            _type: "image",
+            asset: {
+                _type: "reference",
+                _ref: imageAsset._id,
+            }
+        };
     }
-}
-    const subreddit=await adminClient.create(subredditDoc as Subreddit)
+    
+    const subreddit = await adminClient.create(subredditDoc as Subreddit);
     console.log(`Subreddit created successfully with ID: ${subreddit._id}`);
-    return {subreddit};
-
-    } catch (error) {
+    return { subreddit };
+    
+} catch (error) {
     console.error("Error creating subreddit:", error);
-    return {error: "Failed to create subreddit" };
-    }
+    return { error: "Failed to create subreddit" };
+}
+}
