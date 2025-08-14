@@ -291,9 +291,65 @@ export type SanityAssetSourceData = {
 
 export type AllSanitySchemaTypes = Vote | Comment | Post | Subreddit | User | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./src/sanity/lib/comment/getCommentReply.ts
+// Variable: getCommentRepliesQuery
+// Query: *[_type == "comment" && parentComment._ref == $commentId] {            _id,            content,            createdAt,            "author": author->,            "replies": *[_type == "comment" && parentComment._ref == ^._id],            "votes": {                "upvotes": count(*[_type == "vote" && comment._ref == ^._id && voteType == "upvote"]),                "downvotes": count(*[_type == "vote" && comment._ref == ^._id && voteType == "downvote"]),                "netScore": count(*[_type == "vote" && comment._ref == ^._id && voteType == "upvote"]) -                            count(*[_type == "vote" && comment._ref == ^._id && voteType == "downvote"]),                "voteStatus": *[_type == "vote" && comment._ref == ^._id && user._ref == $userId][0].voteType            }        }
+export type GetCommentRepliesQueryResult = Array<{
+  _id: string;
+  content: string | null;
+  createdAt: string | null;
+  author: {
+    _id: string;
+    _type: "user";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    username?: string;
+    email?: string;
+    imageUrl?: string;
+    joinedAt?: string;
+    isReported?: boolean;
+  } | null;
+  replies: Array<{
+    _id: string;
+    _type: "comment";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    content?: string;
+    author?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "user";
+    };
+    post?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "post";
+    };
+    parentComment?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "comment";
+    };
+    isReported?: boolean;
+    createdAt?: string;
+    isDeleted?: boolean;
+  }>;
+  votes: {
+    upvotes: number;
+    downvotes: number;
+    netScore: number;
+    voteStatus: "downvote" | "upvote" | null;
+  };
+}>;
+
 // Source: ./src/sanity/lib/post/getPosts.ts
 // Variable: getAllPostsQuery
-// Query: *[_type=='post'&& isDeleted!=false]{_id,title, "slug":slug.current,body, publishedAt,"author":author->,"subreddit":subreddit->,image,isDeleted    }|order(publishedAt desc)
+// Query: *[_type=='post']{_id,title, "slug":slug.current,body, publishedAt,"author":author->,"subreddit":subreddit->,image,isDeleted    }|order(publishedAt desc)
 export type GetAllPostsQueryResult = Array<{
   _id: string;
   title: string | null;
@@ -517,7 +573,8 @@ export type GetUserPostVoteStatusQueryResult = "downvote" | "upvote" | null;
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type=='post'&& isDeleted!=false]{\n_id,\ntitle, \n\"slug\":slug.current,\nbody, \npublishedAt,\n\"author\":author->,\n\"subreddit\":subreddit->,\nimage,\nisDeleted\n    }|order(publishedAt desc)": GetAllPostsQueryResult;
+    "\n        *[_type == \"comment\" && parentComment._ref == $commentId] {\n            _id,\n            content,\n            createdAt,\n            \"author\": author->,\n            \"replies\": *[_type == \"comment\" && parentComment._ref == ^._id],\n            \"votes\": {\n                \"upvotes\": count(*[_type == \"vote\" && comment._ref == ^._id && voteType == \"upvote\"]),\n                \"downvotes\": count(*[_type == \"vote\" && comment._ref == ^._id && voteType == \"downvote\"]),\n                \"netScore\": count(*[_type == \"vote\" && comment._ref == ^._id && voteType == \"upvote\"]) - \n                           count(*[_type == \"vote\" && comment._ref == ^._id && voteType == \"downvote\"]),\n                \"voteStatus\": *[_type == \"vote\" && comment._ref == ^._id && user._ref == $userId][0].voteType\n            }\n        }\n    ": GetCommentRepliesQueryResult;
+    "*[_type=='post']{\n_id,\ntitle, \n\"slug\":slug.current,\nbody, \npublishedAt,\n\"author\":author->,\n\"subreddit\":subreddit->,\nimage,\nisDeleted\n    }|order(publishedAt desc)": GetAllPostsQueryResult;
     "\n    *[_type == \"subreddit\" && title == $name][0] {\n    _id\n    }\n    ": CheckExistingQueryResult;
     "\n        *[_type == \"subreddit\" && slug.current == $slug] [0] {\n            _id\n        }\n    ": CheckSlugQueryResult;
     "*[_type == \"subreddit\"] {\n      ...,\n      \"slug\": slug.current,\n      \"moderator\": moderator->,\n    } | order(createdAt desc)": GetSubredditsQueryResult;

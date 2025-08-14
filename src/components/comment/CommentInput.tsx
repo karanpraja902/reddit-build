@@ -1,10 +1,11 @@
-'use client'
-
+"use client"
 import { useRouter } from "next/navigation";
-// import { ReactElement, useState, useTransition } from "react";
+import { ReactElement } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useState, useTransition } from "react";
+import { createComment } from "../../../actions/createComment";
 
 interface postProps{
     postId:string,

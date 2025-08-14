@@ -7,6 +7,7 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { MessageSquare } from "lucide-react";
 import CommentInput from "../comment/CommentInput";
+import CommentList from "../comment/CommentList";
 
 
 
@@ -86,11 +87,12 @@ const comments=await getPostComments(post._id,userId);
 )}
 <button className="flex items-center px-1 py-2 gap-1 text-sm text-gray-500">
     <MessageSquare className="w-4 h-4" />
-    <span>Comments </span>
+    <span>{comments.length} Comments  </span>
 </button>
 {/* CommentInput */}
 {/* CommentList */}
 <CommentInput postId={post._id} parentCommentId="" />
+<CommentList postId={post._id} comments={comments} userId={userId} />
 </div>
 </div>
     {/* Buttons */}
