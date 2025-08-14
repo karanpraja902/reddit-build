@@ -1,0 +1,10 @@
+{
+  "vim.enable": true,
+  "vim.useSystemClipboard": true,
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "m"],
+      "after": ["<Esc>"]
+    }
+  ]
+}

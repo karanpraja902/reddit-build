@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from "next/navigation";
-import { ReactElement, useState, useTransition } from "react";
+// import { ReactElement, useState, useTransition } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -18,6 +18,24 @@ export const CommentInput=({postId,parentCommentId}:postProps)=>{
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); //after form submission
         // setContent(e.target.value)
+        startTransition(async()=>{
+        try{ 
+            const result=await createComment(
+                postId,
+                parentCommentId,
+                content);
+                if(result.error){
+                    console.error("error adding comment",result.error);}
+                    else{
+                        //clear input after successful submission
+                        setContent("");
+                        //refresh the page to show the new comment
+                        // router.refresh();
+                    }
+        }catch(error){
+console.error("failed to add comment",error)
+        }
+        })
     }
     
     return (
