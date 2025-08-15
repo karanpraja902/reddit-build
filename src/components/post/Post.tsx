@@ -9,6 +9,8 @@ import { MessageSquare } from "lucide-react";
 import CommentInput from "../comment/CommentInput";
 import CommentList from "../comment/CommentList";
 import PostVoteButtons from "./PostVoteButtons";
+import ReportButton from "../ReportButton";
+import DeleteButton from "../deleteButton";
 
 
 
@@ -94,10 +96,26 @@ const comments=await getPostComments(post._id,userId);
 {/* CommentList */}
 <CommentInput postId={post._id} parentCommentId="" />
 <CommentList postId={post._id} comments={comments} userId={userId} />
+
+</div>
+<div className="top-2 right-2">
+    <div className="flex items-center gap-2">
+        <ReportButton contentId={post._id} />
+        {/* Delete Button would go here */}
+    </div>
 </div>
 </div>
-    {/* Buttons */}
-    {/* Report Button */}
+{/* Buttons */}
+
+{
+    post.author?._id && (
+        <DeleteButton
+            contentOwnerId={post.author?._id}
+            contentId={post._id}
+            contentType="post"
+        />
+    )
+}
     {/* Delete Button */}
 </article>
 

@@ -9,6 +9,8 @@ import {
   GetPostCommentsQueryResult,
   GetCommentRepliesQueryResult
 } from "@/sanity.types";
+import ReportButton from "../ReportButton";
+import DeleteButton from "../deleteButton";
 
 function CommentReply({
   postId,
@@ -32,15 +34,15 @@ function CommentReply({
           {isReplying ? "Cancel" : isSignedIn ? "Reply" : "Sign in to reply"}
         </button>
 
-        {/* <ReportButton contentId={comment._id} /> */}
+        <ReportButton contentId={comment._id} />
         
-        {/* {comment.author?._id && (
+        {comment.author?._id && (
           <DeleteButton
             contentOwnerId={comment.author._id}
             contentId={comment._id}
             contentType="comment"
           />
-        )} */}
+        )}
       </div>
 
       {isReplying && (
