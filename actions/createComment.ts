@@ -1,5 +1,4 @@
 "use server"
-
 import { addComment } from "@/sanity/lib/comment/addComment";
 import { getUser } from "@/sanity/lib/user/getUser";
 import { error } from "console";

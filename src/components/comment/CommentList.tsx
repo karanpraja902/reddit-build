@@ -1,4 +1,5 @@
-import { GetPostCommentsQueryResult } from  "../../../sanity.types";
+
+import { GetPostCommentsQueryResult, GetCommentRepliesQueryResult } from  "../../../sanity.types";
 import Comment from "./Comment";
 
 async function CommentList({
@@ -7,10 +8,10 @@ async function CommentList({
     userId,
 }: {
     postId: string;
-    comments: GetPostCommentsQueryResult;
+    comments: (GetPostCommentsQueryResult[number]|GetCommentRepliesQueryResult[number])[];
     userId: string | null;
 }) {
-    const isRootComment = !comments.some((comment) => comment.parentComment);
+    const isRootComment = !comments.some((comment) => 'parentComment' in comment && comment.parentComment);
 
     return (
         <section className="mt-8">
@@ -29,6 +30,7 @@ async function CommentList({
         postId={postId}
         comment={comment}
         userId={userId}
+        replies={[]}
       />
     ))
   ) : (

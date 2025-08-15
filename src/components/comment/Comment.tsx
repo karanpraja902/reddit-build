@@ -2,21 +2,24 @@
 import { GetPostCommentsQueryResult } from "../../../sanity.types";
 import React from "react";
 import { GetCommentRepliesQueryResult } from "../../../sanity.types";
-import { getCommentReplies } from "../../sanity/lib/comment/getCommentReply";
+
 import Image from "next/image";
 import { UserCircle, ThumbsUp, ThumbsDown } from "lucide-react";
 import TimeAgo from "react-timeago";
-import CommentReply from "./CommentReply";
 import CommentList from "./CommentList";
+import CommentReply from "./CommentReply";
+import PostVoteButtons from "../post/PostVoteButtons";
 
-async function Comment({
+function Comment({
     postId,
     comment,
     userId,
+    replies,
 }: {
     postId: string;
     comment: GetPostCommentsQueryResult[number]|GetCommentRepliesQueryResult[number];
     userId: string | null;
+    replies: (GetPostCommentsQueryResult[number]|GetCommentRepliesQueryResult[number])[];
 }) {
     // const replies = await getCommentReplies(comment._id, userId); // Fixed: __id → _id
     const userVoteStatus = comment.votes?.voteStatus; // Added optional chaining
@@ -26,6 +29,7 @@ async function Comment({
         <article className="bg-white rounded-lg border border-gray-200 p-4 mb-4 hover:shadow-sm transition-shadow duration-200">
             <div className="flex gap-4">
                 {/* Vote buttons on the left */}
+                <PostVoteButtons contentId={comment._id} votes={comment.votes} vote={userVoteStatus} contentType="comment"/>
                 <div className="flex flex-col items-center gap-1 pt-1">
                     <button className="p-1.5 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
                         <ThumbsUp className={`w-4 h-4 ${userVoteStatus === 'upvote' ? 'text-primary fill-current' : 'text-muted-foreground'}`} />
@@ -85,12 +89,13 @@ async function Comment({
 
                     <CommentReply postId={postId} comment={comment} />
 
+
                     {/* Comment replies - supports infinite nesting */}
-                    {/* {replies?.length > 0 && (
+                    {replies?.length > 0 && (
                         <div className="mt-3 ps-2 border-s-2 border-gray-100">
                             <CommentList postId={postId} comments={replies} userId={userId} />
                         </div>
-                    )}  */}
+                    )}
 
                     {/* Author Name & Timestamp */}
                     <div>

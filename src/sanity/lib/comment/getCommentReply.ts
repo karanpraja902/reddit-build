@@ -1,8 +1,7 @@
-// "use server"
 import { defineQuery } from "groq";
 import { sanityFetch } from "../live";
 
-export async function getCommentReplies(commentId: string, userId: string | null) {
+const getCommentReplies=async(commentId: string, userId: string | null)=> {
     const getCommentRepliesQuery = defineQuery(`
         *[_type == "comment" && parentComment._ref == $commentId] {
             _id,
@@ -29,3 +28,4 @@ export async function getCommentReplies(commentId: string, userId: string | null
 
     return result?.data || [];
 }
+export default getCommentReplies;
