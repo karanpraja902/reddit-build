@@ -8,6 +8,7 @@ import RedditFull from "../../../public/images/Reddit full.svg";
 import { ChevronLeftIcon, MenuIcon } from "lucide-react";
 import Image from "next/image";
 import { useSidebar } from '../ui/sidebar';
+import CreatePost from '../post/CreatePost';
 
 function Header() {
   const { user } = useUser();
@@ -44,7 +45,9 @@ return (
       </div>
       
       {/* Right Side */}
-      <div>
+      <div className='flex items-canter gap-2'>
+        <CreatePost/>
+
         <SignedIn>
           <UserButton />
         </SignedIn>

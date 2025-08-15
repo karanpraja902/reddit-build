@@ -1,5 +1,5 @@
 import { getPostVotes } from "@/sanity/lib/vote/getPostVotes";
-import { GetAllPostsQueryResult } from "../../../sanity.types";
+import { GetAllPostsQueryResult, GetPostsForSubredditQueryResult } from "../../../sanity.types";
 import { getUserPostVoteStatus } from "@/sanity/lib/vote/getUserPostVoteStatus";
 import { getPostComments } from "@/sanity/lib/vote/getPostComments";
 import TimeAgo from "@/components/ui/TimeAgo";
@@ -13,7 +13,7 @@ import PostVoteButtons from "./PostVoteButtons";
 
 
 interface PostProps{
-    post: GetAllPostsQueryResult[number]; // Change from GetAllPostsQueryResult[number] to any
+    post: GetAllPostsQueryResult[number]|GetPostsForSubredditQueryResult[number], // Change from GetAllPostsQueryResult[number] to any
     userId: string | null;
 }
 async function Post({post, userId}: PostProps){
