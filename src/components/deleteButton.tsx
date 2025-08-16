@@ -34,9 +34,12 @@ function DeleteButton({
     setError(null);
 
     try {
+        console.log("deletion process starts:")
         const response = contentType === "post"
             ? await deletePost(contentId)
             : await deleteComment(contentId);
+            console.log("deletion endprocess:")
+            console.log(response)
 
         if (response.error) {
             setError(response.error);

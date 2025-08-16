@@ -6,8 +6,8 @@ import { urlFor } from "@/sanity/lib/image";
 import Post from "@/components/post/Post";
 import { getPostsForSubreddit } from "@/sanity/lib/subreddit/getPostsForSubreddit";
 
-async function CommunityPage({ params }: { params: { slug: string } }) {
-    const { slug } =  params;
+async function CommunityPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
     const community = await getSubredditBySlug(slug);
     if (!community) return null;
 

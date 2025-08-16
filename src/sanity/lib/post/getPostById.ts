@@ -20,6 +20,8 @@ export async function getPostById(postId: string) {
         query: getPostByIdQuery,
         params: { postId },
     });
+    console.log("getPostById:")
+    console.log(post)
     
     return post?.data;
 }
