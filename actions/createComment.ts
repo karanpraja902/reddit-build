@@ -5,8 +5,8 @@ import { error } from "console";
 
  export async function createComment(
     postId:string,
-    parentCommentId?:string,
-    content:string
+    content:string,
+    parentCommentId?:string
  )
  {
    const user=await getUser();

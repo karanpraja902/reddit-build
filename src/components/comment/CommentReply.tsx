@@ -8,7 +8,7 @@ import CommentInput from "./CommentInput";
 import {
   GetPostCommentsQueryResult,
   GetCommentRepliesQueryResult
-} from "@/sanity.types";
+} from "../../../sanity.types";
 import ReportButton from "../ReportButton";
 import DeleteButton from "../deleteButton";
 

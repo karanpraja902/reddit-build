@@ -4,7 +4,6 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import Post from "@/components/post/Post";
 import { getPostsForSubreddit } from "@/sanity/lib/subreddit/getPostsForSubreddit";
-import { GetPostsForSubredditQueryResult } from "../../../../../sanity.types";
 
 async function CommunityPage({
   params,
@@ -52,7 +51,7 @@ async function CommunityPage({
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex flex-col gap-4">
             {posts.length > 0 ? (
-              posts.map((post: GetPostsForSubredditQueryResult[0]) => (
+              posts.map((post) => (
                 <Post key={post._id} post={post} userId={user?.id || null} />
               ))
             ) : (

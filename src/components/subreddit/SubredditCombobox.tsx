@@ -20,7 +20,7 @@ import { useState } from "react";
 
 type Subreddit = {
     _id: string;
-    title: string | null;
+    title?: string | undefined;
     slug: string | null;
 };
 

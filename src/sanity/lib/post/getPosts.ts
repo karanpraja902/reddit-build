@@ -1,8 +1,8 @@
 import { defineQuery } from "groq";
 import { sanityFetch } from "../live";
+import { GetAllPostsQueryResult } from "../../../../sanity.types";
 
-
- const getPosts=async ()=> {
+ const getPosts=async (): Promise<GetAllPostsQueryResult> => {
     // Execute Query
     const getAllPostsQuery=
     defineQuery(`*[_type=='post'&&isDeleted!=true]{

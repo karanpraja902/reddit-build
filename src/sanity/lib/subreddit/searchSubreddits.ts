@@ -1,20 +1,8 @@
 import { sanityFetch } from "../live";
 import { defineQuery } from "groq";
+import { SearchSubredditsQueryResult } from "../../../../sanity.types";
 
-interface Subreddit {
-  _id: string;
-  title: string;
-  slug: string;
-  description?: string;
-  image?: string;
-  moderator?: {
-    _id: string;
-    username: string;
-  };
-  createdAt: string;
-}
-
-export async function searchSubreddits(searchTerm: string): Promise<Subreddit[]> {
+export async function searchSubreddits(searchTerm: string): Promise<SearchSubredditsQueryResult> {
   // Skip empty search terms
   if (!searchTerm?.trim()) {
     return [];

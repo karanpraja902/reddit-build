@@ -18,7 +18,12 @@ function PostVoteButtons({
   contentType = "post",
 }: {
   contentId: string;
-  votes: GetPostVotesQueryResult;
+  votes: GetPostVotesQueryResult | {
+    upvotes: number;
+    downvotes: number;
+    netScore: number;
+    voteStatus: "upvote" | "downvote" | null;
+  };
   vote: GetUserPostVoteStatusQueryResult;
   contentType?: "post" | "comment";
 }) {
@@ -26,7 +31,7 @@ function PostVoteButtons({
   const [optimisticVote, setOptimisticVote] = 
     useState<GetUserPostVoteStatusQueryResult>(vote);
   const [optimisticScore, setOptimisticScore] = useState<number>(
-    votes.netscore || 0
+    ('netscore' in votes ? votes.netscore : votes.netScore) || 0
   );
   const [isPending, startTransition] = useTransition();
 
@@ -59,7 +64,7 @@ function PostVoteButtons({
       } catch (error) {
         // If there's an error, revert the optimistic updates
         setOptimisticVote(vote);
-        setOptimisticScore(votes.netscore || 0);
+        setOptimisticScore(('netscore' in votes ? votes.netscore : votes.netScore) || 0);
         console.error(`Failed to upvote ${contentType}:`, error);
       }
     });
@@ -94,7 +99,7 @@ function PostVoteButtons({
       } catch (error) {
         // If there's an error, revert the optimistic updates
         setOptimisticVote(vote);
-        setOptimisticScore(votes.netscore || 0);
+        setOptimisticScore(('netscore' in votes ? votes.netscore : votes.netScore) || 0);
         console.error(`Failed to downvote ${contentType}:`, error);
       }
     });

@@ -4,7 +4,7 @@ interface AddCommentParams{
     content:string;
     postId:string;
     userId:string;
-    parentCommentId:string;
+    parentCommentId?:string;
 }
 export async function addComment({
     content,

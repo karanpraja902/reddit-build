@@ -23,8 +23,8 @@ export const CommentInput=({postId,parentCommentId}:postProps)=>{
         try{ 
             const result=await createComment(
                 postId,
-                parentCommentId,
-                content);
+                content,
+                parentCommentId);
                 if(result.error){
                     console.error("error adding comment",result.error);}
                     else{

@@ -10,9 +10,9 @@ interface SearchParams {
 async function SearchPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
-  const { query = '' } = searchParams;
+  const { query = '' } = await searchParams;
   const subreddits = await searchSubreddits(query);
   console.log("subredittssss:")
   console.log(subreddits)
