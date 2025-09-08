@@ -35,13 +35,19 @@ export function SubredditCombobox({
 }: SubredditComboboxProps) {
     const router = useRouter();
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(defaultValue);
+    // If defaultValue is a slug from URL, find the corresponding title
+    const initialValue = defaultValue 
+        ? subreddits.find(s => s.slug === defaultValue)?.title || defaultValue
+        : "";
+    const [value, setValue] = useState(initialValue);
 
     const handleSelect = (currentValue: string) => {
         setValue(currentValue);
         setOpen(false);
-        if (currentValue) {
-            router.push(`/create-post?subreddit=${currentValue}`);
+        // Find the selected subreddit to get its slug
+        const selectedSubreddit = subreddits.find(s => s.title === currentValue);
+        if (selectedSubreddit && selectedSubreddit.slug) {
+            router.push(`/create-post?subreddit=${selectedSubreddit.slug}`);
         } else {
             router.push("/create-post");
         }

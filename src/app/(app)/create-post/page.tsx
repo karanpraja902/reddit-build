@@ -14,6 +14,10 @@ async function CreatePostPage({
     const subreddits = await getSubreddits();
 
    if (subreddit) {
+    // Find the subreddit to display its title
+    const selectedSubreddit = subreddits.find(s => s.slug === subreddit);
+    const displayName = selectedSubreddit?.title || subreddit;
+    
     return (
         <div>
             {/* Banner */}
@@ -24,7 +28,7 @@ async function CreatePostPage({
                             <h1 className="text-2xl font-bold">Create Post</h1>
                             <p className="text-sm text-gray-600">
                                 Create a post in the{" "}
-                                <span className="font-bold">{subreddit}</span> community
+                                <span className="font-bold">{displayName}</span> community
                             </p>
                         </div>
                     </div>

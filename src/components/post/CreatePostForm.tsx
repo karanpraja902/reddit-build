@@ -39,13 +39,15 @@ function CreatePostForm() {
 
 
     const handleCreatePost = async (e: React.FormEvent<HTMLFormElement>) => {
-     if (!title.trim()) {
-    setErrorMessage("Post title is required");
-    return;
-}
+        e.preventDefault();
+        
+        if (!title.trim()) {
+            setErrorMessage("Post title is required");
+            return;
+        }
 
-setErrorMessage("");
-setIsLoading(true);
+        setErrorMessage("");
+        setIsLoading(true);
 
 try {
     let imageBase64: string | null = null;
@@ -76,7 +78,7 @@ console.log("Finished creating post", result);
 if ("error" in result && result.error) {
     setErrorMessage(result.error);
 } else {
-    router.push('/community/${subreddit}');
+    router.push(`/community/${subreddit}`);
 }
     }catch (err) {
         console.error("Failed to create post", err);
